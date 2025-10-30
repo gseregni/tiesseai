@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+const { frontmatter } = await getEntry('applications', 'robotic-cell-measurement');
+const images = frontmatter.gallery;
+---
+
+<div class="grid grid-cols-2 gap-4">
+	{images.map((image) => (
+
+        <img src={image} alt="Immagine" 
+              class="aspect-[4/3] w-full rounded-xl object-cover border border-slate-200 hover:shadow-lg transition-shadow" loading="lazy" />
+	))}
+</div>
+
