@@ -1,0 +1,79 @@
+---
+import Layout from './Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import '../styles/global.css';
+---
+
+
+<Layout>
+
+    <Navbar />
+
+     
+  <div class="max-w-7xl mx-auto px-4">
+    
+
+    <!-- Layout a 2 colonne -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Colonna sinistra: Menu applicazioni (4 colonne su 12) -->
+      <aside class="lg:col-span-4 lg:border-r lg:border-slate-200 lg:pr-8">
+        <div class="sticky top-4">
+          <h2 class="text-xl font-bold text-slate-900 mt-8 mb-4">Applicazioni</h2>
+          
+          <nav>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
+                  <span class="text-xl">🎯</span>
+                  <span>Riconoscimento punti di presa</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
+                  <span class="text-xl">🛡️</span>
+                  <span>Verifica ingombri e ostacoli</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
+                  <span class="text-xl">📏</span>
+                  <span>Misurazione dimensioni</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
+                  <span class="text-xl">📍</span>
+                  <span>Identificazione componenti</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
+                  <span class="text-xl">⚠️</span>
+                  <span>Monitoraggio sicurezza</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
+                  <span class="text-xl">🔌</span>
+                  <span>Integrazione PLC e robot</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Colonna destra: Contenuto e tabella (8 colonne su 12) -->
+      <main class="lg:col-span-8 space-y-8">
+       
+        <slot />
+
+      </main>
+    </div>
+  </div>
+
+
+
+    
+</Layout>
