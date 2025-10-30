@@ -1,7 +1,27 @@
 ---
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.astro';
+
 import '../styles/global.css';
+
+
+// Recupera tutte le pagine dalla directory applicazioni
+const applicazioni = await Astro.glob('../pages/applications/*.astro');
+// Mappa le informazioni necessarie
+
+
+const appList = applicazioni.filter(app => !app.file.endsWith('index.astro')).map(app => {
+
+  const path = app.url || app.file.split('/pages')[1].replace('.astro', '');
+  // Puoi definire frontmatter nelle pagine per titolo e icona
+  // skip index
+  
+  return {
+    title: app.frontmatter?.title || 'Applicazione',
+    icon: app.frontmatter?.icon || '📄',
+    href: path
+  };
+});
 ---
 
 
@@ -11,8 +31,7 @@ import '../styles/global.css';
 
      
   <div class="max-w-7xl mx-auto px-4">
-    
-
+  
     <!-- Layout a 2 colonne -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
@@ -23,44 +42,21 @@ import '../styles/global.css';
           
           <nav>
             <ul class="space-y-2">
-              <li>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
-                  <span class="text-xl">🎯</span>
-                  <span>Riconoscimento punti di presa</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
-                  <span class="text-xl">🛡️</span>
-                  <span>Verifica ingombri e ostacoli</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
-                  <span class="text-xl">📏</span>
-                  <span>Misurazione dimensioni</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
-                  <span class="text-xl">📍</span>
-                  <span>Identificazione componenti</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
-                  <span class="text-xl">⚠️</span>
-                  <span>Monitoraggio sicurezza</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-colors">
-                  <span class="text-xl">🔌</span>
-                  <span>Integrazione PLC e robot</span>
-                </a>
-              </li>
+
+              
+              {appList.map(app => (
+
+                <li>
+                  <a href={app.href} class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
+                    <span class="text-xl">🎯</span>
+                    <span>{app.title}</span>
+                  </a>
+                </li>
+
+              ))}
             </ul>
           </nav>
+
         </div>
       </aside>
 
