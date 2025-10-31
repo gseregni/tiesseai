@@ -17,14 +17,12 @@ const appList = applicazioni.filter(app => !app.file.endsWith('index.astro')).ma
   return {
     title: app.frontmatter?.title || 'Applicazione',
     icon: app.frontmatter?.icon || '📄',
+	image: app.frontmatter?.image || '/public/cover-barcode.jpg',
     href: path
   };
 });
 
-
-
 ---
-
 <Layout>
 	<Navbar />
     
@@ -53,12 +51,21 @@ const appList = applicazioni.filter(app => !app.file.endsWith('index.astro')).ma
 
 			<br>
 			<br>
+			
 			<h1 class="text-4xl font-bold text-slate-900 mb-4">Applicazioni</h1>
 			<!-- img gallery 3x2 -->
 			<div class="grid grid-cols-2 gap-4">
 				
 				{appList.map(app => (
-                  <a href={app.href} class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
+
+					
+
+                  <a href={app.href} class="flex flex-col items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
+
+				  					<img src={app.image} alt={app.title} 
+              class="aspect-[4/3] w-full rounded-xl object-cover border border-slate-200 hover:shadow-lg transition-shadow" loading="lazy" />
+
+
                     <span>{app.title}</span>
                   </a>
               	))}
