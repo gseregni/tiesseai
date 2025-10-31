@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../layouts/Application.astro';
+import Navbar from '../../components/Navbar.astro';
+import '../../styles/global.css';
+
+export const frontmatter = {
+  title: 'Inspection',
+  icon: '🎯'
+};
+---
+
+<BaseLayout>
+    
+
+    
+
+  <div class="max-w-8xl mx-auto px-4">
+        
+        <!-- Header principale -->
+    <div class="my-8">
+      <h1 class="text-4xl font-bold text-slate-900 mb-2">Tracking</h1>
+      <p class="text-lg text-slate-600">Sistema di tracking basato su intelligenza artificiale e computer vision</p>
+    </div>
+
+        <!-- Sezione descrittiva -->
+        <div class="bg-white ">
+          <div class="prose prose-slate max-w-none">
+            <p class="text-lg leading-relaxed text-gray-700 mb-4">
+             
+Abbiamo sviluppato un sistema di tracking basato su intelligenza artificiale e computer vision per l’efficientamento delle linee di smistamento e scarico.
+
+Grazie a telecamere intelligenti e modelli di riconoscimento personalizzabili, il sistema monitora oggetti in movimento fino a 5 m/s lungo intere linee logistiche.
+
+Rileva errori di posizione, collisioni o anomalie e registra immagini/video su cloud o server per analisi successive.
+
+È possibile integrare lettori barcode, OCR e sistemi PLC/gestionali per una gestione automatizzata dei flussi.
+
+Ideale per oggetti di qualsiasi dimensione, dai pochi centimetri a diversi metri.
+
+            </p>
+            
+          </div>
+        </div>
+
+
+        <!-- Mini gallery -->
+        <!-- <div class="bg-white ">
+          <h3 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+            <span class="text-xl">📸</span>
+            <span>Gallery</span>
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <img src="/assets/app-1.jpg" alt="Visione in cella robotica" 
+              class="aspect-[4/3] w-full rounded-xl object-cover border border-slate-200 hover:shadow-lg transition-shadow" loading="lazy" />
+            <img src="/assets/app-2.jpg" alt="Riconoscimento punti di presa" 
+              class="aspect-[4/3] w-full rounded-xl object-cover border border-slate-200 hover:shadow-lg transition-shadow" loading="lazy" />
+            <img src="/assets/app-3.jpg" alt="Verifica ingombri e ostacoli" 
+              class="aspect-[4/3] w-full rounded-xl object-cover border border-slate-200 hover:shadow-lg transition-shadow" loading="lazy" />
+            <img src="/assets/app-4.jpg" alt="Misurazioni dimensioni e posizioni" 
+              class="aspect-[4/3] w-full rounded-xl object-cover border border-slate-200 hover:shadow-lg transition-shadow" loading="lazy" />
+          </div>
+        </div> -->
+
+        <!-- Tabella campi di applicazione -->
+      
+
+  </div>
+</BaseLayout>
