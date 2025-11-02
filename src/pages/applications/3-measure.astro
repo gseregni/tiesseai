@@ -2,12 +2,14 @@
 import BaseLayout from '../../layouts/Application.astro';
 import Navbar from '../../components/Navbar.astro';
 import '../../styles/global.css';
+import Application from '../../layouts/Application.astro';
+import type { ApplicationFrontmatter } from '../../content/types';
 
-export const frontmatter = {
+
+export const frontmatter: ApplicationFrontmatter = {
   title: 'Measurement',
   icon: '📏',
   image: "/public/cover-barcode.png"
-
 };
 ---
 

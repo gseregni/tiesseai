@@ -2,25 +2,19 @@
 import Navbar from '../components/Navbar.astro';
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
+import type { Application } from '../content/types';
 
+const pages = import.meta.glob<Application>('../pages/applications/*.astro', { eager: true });
 
-// Recupera tutte le pagine dalla directory applicazioni
-const applicazioni = await Astro.glob('../pages/applications/*.astro');
+// buid app list with filename with key and frontmatter
 
-// Mappa le informazioni necessarie
-const appList = applicazioni.filter(app => !app.file.endsWith('index.astro')).map(app => {
+const appList = Object.entries(pages).map(([key, page]) => ({
+  title: page.frontmatter.title,
+  icon: page.frontmatter.icon,
+  image: page.frontmatter.image,
+  href: key.replace('../pages', '').replace('.astro', ''),
+}));
 
-  const path = app.url || app.file.split('/pages')[1].replace('.astro', '');
-  // Puoi definire frontmatter nelle pagine per titolo e icona
-  // skip index
-  
-  return {
-    title: app.frontmatter?.title || 'Applicazione',
-    icon: app.frontmatter?.icon || '📄',
-	image: app.frontmatter?.image || '/public/cover-barcode.jpg',
-    href: path
-  };
-});
 
 ---
 <Layout>
