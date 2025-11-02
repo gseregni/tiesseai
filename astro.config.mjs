@@ -6,12 +6,10 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   vite: {
     server: {
-      port: 3000,
-      allowedHosts:true
+      allowedHosts:['devserver-preview--tiesse-ai.netlify.app']
     },
     preview: {
-      
-      allowedHosts:true
+      allowedHosts:['devserver-preview--tiesse-ai.netlify.app']
     },
     plugins: [tailwindcss()],
   }
