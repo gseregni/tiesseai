@@ -1,25 +1,23 @@
 ---
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.astro';
-
+import type { Application } from '../content/types';
 import '../styles/global.css';
 
-
-// Recupera tutte le pagine dalla directory applicazioni
-
-import { collections } from '../content/config';
-
-
-const applications = await collections.applications
-console.log("applications", applications)
-
+const { frontmatter } = Astro.props;
+const pages = import.meta.glob<Application>('../pages/applications/*.md', { eager: true });
+const appList = Object.entries(pages).map(([key, page]) => ({
+  title: page.frontmatter.title,
+  icon: page.frontmatter.icon,
+  image: page.frontmatter.image,
+  href: key.replace('../pages', '').replace('.md', ''),
+}));
 ---
 
 
 <Layout>
 
-    <Navbar />
-
+  <Navbar />
      
   <div class="max-w-7xl mx-auto px-4">
   
@@ -30,21 +28,17 @@ console.log("applications", applications)
       <aside class="lg:col-span-4 lg:border-r lg:border-slate-200 lg:pr-8">
         <div class="sticky top-4">
           <h2 class="text-xl font-bold text-slate-900 mt-8 mb-4">Applicazioni</h2>
-          
           <nav>
             <ul class="space-y-2">
-
-              
-              <!-- {appList.map(app => (
-
+              {appList.map(app => (
                 <li>
+                  
                   <a href={app.href} class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
                     <span class="text-xl">{app.icon}</span>
                     <span>{app.title}</span>
                   </a>
                 </li>
-
-              ))} -->
+              ))}
             </ul>
           </nav>
 
@@ -53,9 +47,24 @@ console.log("applications", applications)
 
       <!-- Colonna destra: Contenuto e tabella (8 colonne su 12) -->
       <main class="lg:col-span-8 space-y-8">
-       
-        <slot />
+        
+        <div class="max-w-8xl mx-auto px-4">
+          
+          <!-- Header principale -->
+          <div class="my-8">
+            <h1 class="text-4xl font-bold text-slate-900 mb-2">{frontmatter.title}</h1>
+            <p class="text-lg text-slate-600">Sistema di tracking basato su intelligenza artificiale e computer vision</p>
+          </div>
 
+          <!-- Sezione descrittiva -->
+          <div class="bg-white">
+            <div class="prose prose-slate max-w-none">
+              <p class="text-lg leading-relaxed text-gray-700 mb-4">
+                <slot />
+              </p>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>
