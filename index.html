@@ -48,8 +48,13 @@
   .btn { display: inline-block; padding: 13px 26px; border-radius: 4px; font-weight: 600; font-family: Poppins, "Open Sans", sans-serif; font-size: .95rem; text-decoration: none; border: 2px solid transparent; transition: transform .2s, background .2s, border-color .2s; cursor: pointer; }
   button.btn { appearance: none; -webkit-appearance: none; }
   .btn:hover { transform: translateY(-2px); }
-  #introVideo { position: fixed; width: 1px; height: 1px; opacity: 0; pointer-events: none; bottom: 0; right: 0; }
   .btn-primary { background: var(--red); color: #fff; }
+  .video-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.72); }
+  .video-modal.open { display: flex; }
+  .video-modal__panel { position: relative; width: min(1100px, 96vw); background: #0e0e0e; border-radius: 10px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.45); }
+  .video-modal__close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .video-modal__close:hover { background: rgba(0,0,0,.8); }
+  .video-modal video { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; object-fit: contain; }
   .btn-primary:hover { background: var(--red-dark); }
   .btn-ghost { background: var(--bg-soft); color: var(--ink); }
   .btn-ghost:hover { border-color: var(--ink); }
@@ -314,13 +319,10 @@
         </p>
         <div class="actions">
           <a class="btn btn-primary" href="https://ai.tiesseautomazioni.com/contatti">Richiedi una dimostrazione</a>
-          <button type="button" class="btn btn-ghost" id="btnIntro" aria-haspopup="dialog" aria-label="Guarda il video">
+          <button type="button" class="btn btn-ghost" id="btnIntro" aria-haspopup="dialog" aria-controls="introModal" aria-label="Guarda il video">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:-2px;margin-right:8px"><path d="M8 5v14l11-7z"/></svg>Guarda il video
           </button>
         </div>
-        <video id="introVideo" playsinline controls preload="metadata" aria-label="Video introduttivo Come funziona">
-          <source src="intro.mp4" type="video/mp4">
-        </video>
       </div>
 
       <div class="stage reveal">
@@ -522,6 +524,16 @@
 
 </main>
 
+<div class="video-modal" id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle" hidden>
+  <div class="video-modal__panel">
+    <button type="button" class="video-modal__close" id="introModalClose" aria-label="Chiudi video">&times;</button>
+    <h2 id="introModalTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Guarda il video</h2>
+    <video id="introVideo" controls playsinline preload="metadata">
+      <source src="intro.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 <footer class="site">
   <div class="wrap">
     <img src="https://framerusercontent.com/images/D5zYro25ZSxx9896pIyCDOR6Blc.png?width=520" alt="Tiesse Automazioni">
@@ -604,44 +616,36 @@
   });
   show(0);
 
-  /* Come funziona → intro.mp4 a schermo intero */
+  /* Guarda il video → modale con player */
   var introBtn = document.getElementById('btnIntro');
+  var introModal = document.getElementById('introModal');
   var introVid = document.getElementById('introVideo');
-  if (introBtn && introVid) {
-    function exitIntroFs() {
-      var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
-      if (!fsEl && !introVid.webkitDisplayingFullscreen) {
-        introVid.pause();
-      }
-    }
-    introBtn.addEventListener('click', function () {
-      introVid.currentTime = 0;
-      var playPromise = introVid.play();
-      function goFullscreen() {
-        if (introVid.requestFullscreen) {
-          introVid.requestFullscreen().catch(function () {});
-        } else if (introVid.webkitEnterFullscreen) {
-          introVid.webkitEnterFullscreen();
-        } else if (introVid.webkitRequestFullscreen) {
-          introVid.webkitRequestFullscreen();
-        } else if (introVid.msRequestFullscreen) {
-          introVid.msRequestFullscreen();
-        }
-      }
-      if (playPromise && playPromise.then) {
-        playPromise.then(goFullscreen).catch(goFullscreen);
-      } else {
-        goFullscreen();
-      }
-    });
-    document.addEventListener('fullscreenchange', exitIntroFs);
-    document.addEventListener('webkitfullscreenchange', exitIntroFs);
-    introVid.addEventListener('webkitendfullscreen', function () { introVid.pause(); });
-    introVid.addEventListener('ended', function () {
-      if (document.exitFullscreen && document.fullscreenElement) document.exitFullscreen();
-      else if (document.webkitExitFullscreen && document.webkitFullscreenElement) document.webkitExitFullscreen();
+  var introClose = document.getElementById('introModalClose');
+  function openIntroModal() {
+    if (!introModal || !introVid) return;
+    introModal.hidden = false;
+    introModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    introVid.currentTime = 0;
+    introVid.play().catch(function () {});
+  }
+  function closeIntroModal() {
+    if (!introModal || !introVid) return;
+    introVid.pause();
+    introModal.classList.remove('open');
+    introModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+  if (introBtn) introBtn.addEventListener('click', openIntroModal);
+  if (introClose) introClose.addEventListener('click', closeIntroModal);
+  if (introModal) {
+    introModal.addEventListener('click', function (e) {
+      if (e.target === introModal) closeIntroModal();
     });
   }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && introModal && introModal.classList.contains('open')) closeIntroModal();
+  });
 })();
 </script>
 
