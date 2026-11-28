@@ -15,7 +15,8 @@
   - Colori e caratteri come il sito attuale: rosso #e02b20, blu #007bb6, Poppins + Open Sans.
   - Video e immagini sono quelli già presenti sul sito (framerusercontent.com): se un giorno
     li sostituite sul sito, aggiornate i link qui sotto (cerca "framerusercontent").
-  - Contatti già collegati: pulsanti verso /contatti, email e telefono del sito.
+  - Contatti: modale con form Netlify (name="contatti"). Notifiche email da configurare
+    in Netlify → Forms → Submission notifications verso info@tiesseautomazioni.com.
   - Facoltativi: video di presentazione e brochure. Sezione commentata in fondo ("OPZIONALE").
   - Le animazioni si fermano da sole se il visitatore ha attivato "riduci movimento".
 -->
@@ -49,12 +50,32 @@
   button.btn { appearance: none; -webkit-appearance: none; }
   .btn:hover { transform: translateY(-2px); }
   .btn-primary { background: var(--red); color: #fff; }
-  .video-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.72); }
-  .video-modal.open { display: flex; }
-  .video-modal__panel { position: relative; width: min(1100px, 96vw); background: #0e0e0e; border-radius: 10px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.45); }
-  .video-modal__close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer; }
-  .video-modal__close:hover { background: rgba(0,0,0,.8); }
-  .video-modal video { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; object-fit: contain; }
+  .modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.72); }
+  .modal.open { display: flex; }
+  .modal__panel { position: relative; width: min(1100px, 96vw); background: #0e0e0e; border-radius: 10px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.45); }
+  .modal__close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .modal__close:hover { background: rgba(0,0,0,.8); }
+  .modal video { width: 100%; aspect-ratio: 16 / 9; display: block; background: #000; object-fit: contain; }
+  .modal__panel--form { width: min(560px, 96vw); background: #fff; color: var(--ink); padding: 36px 32px 28px; }
+  .modal__panel--form .modal__close { background: #eee; color: var(--ink); }
+  .modal__panel--form .modal__close:hover { background: #ddd; }
+  .modal__panel--form h2 { margin: 0 0 .4em; font-size: 1.55rem; }
+  .modal__panel--form .lead { color: var(--muted); margin-bottom: 1.4em; font-size: .95rem; }
+  .contact-form { display: grid; gap: 14px; }
+  .contact-form label { display: grid; gap: 6px; font-size: .82rem; font-weight: 600; color: var(--ink); }
+  .contact-form input,
+  .contact-form textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 4px; font: inherit; color: var(--ink); background: #fff; }
+  .contact-form input:focus,
+  .contact-form textarea:focus { outline: 2px solid color-mix(in srgb, var(--red) 35%, transparent); border-color: var(--red); }
+  .contact-form textarea { min-height: 110px; resize: vertical; }
+  .contact-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .contact-form .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 4px; }
+  .contact-form .hp { position: absolute; left: -9999px; height: 0; overflow: hidden; }
+  .contact-form .status { font-size: .9rem; color: var(--muted); min-height: 1.2em; }
+  .contact-form .status.ok { color: #1a7a3c; }
+  .contact-form .status.err { color: var(--red); }
+  .contact-form[data-sent="true"] .fields { display: none; }
+  @media (max-width: 600px) { .contact-form .row { grid-template-columns: 1fr; } .modal__panel--form { padding: 28px 18px 22px; } }
   .btn-primary:hover { background: var(--red-dark); }
   .btn-ghost { background: var(--bg-soft); color: var(--ink); }
   .btn-ghost:hover { border-color: var(--ink); }
@@ -318,7 +339,7 @@
           i dati di macchina, di produzione e di commessa, senza sostituire nulla di ciò che hai già.
         </p>
         <div class="actions">
-          <a class="btn btn-primary" href="https://ai.tiesseautomazioni.com/contatti">Richiedi una dimostrazione</a>
+          <button type="button" class="btn btn-primary" data-open-contact>Richiedi una dimostrazione</button>
           <button type="button" class="btn btn-ghost" id="btnIntro" aria-haspopup="dialog" aria-controls="introModal" aria-label="Guarda il video">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:-2px;margin-right:8px"><path d="M8 5v14l11-7z"/></svg>Guarda il video
           </button>
@@ -512,7 +533,7 @@
       <h2 id="t-cta">Vuoi vedere cosa potrebbe rispondere ai tuoi dati?</h2>
       <p>Ti mostriamo un'analisi di esempio sui dati della tua produzione.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="https://ai.tiesseautomazioni.com/contatti">Contattaci</a>
+        <button type="button" class="btn btn-primary" data-open-contact>Contattaci</button>
         <a class="btn btn-ghost" href="https://tiesseautomazioni.com/">Scopri Tiesse Automazioni</a>
       </div>
       <p class="contacts">
@@ -524,13 +545,54 @@
 
 </main>
 
-<div class="video-modal" id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle" hidden>
-  <div class="video-modal__panel">
-    <button type="button" class="video-modal__close" id="introModalClose" aria-label="Chiudi video">&times;</button>
+<div class="modal" id="introModal" role="dialog" aria-modal="true" aria-labelledby="introModalTitle" hidden>
+  <div class="modal__panel">
+    <button type="button" class="modal__close" id="introModalClose" aria-label="Chiudi video">&times;</button>
     <h2 id="introModalTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Guarda il video</h2>
     <video id="introVideo" controls playsinline preload="metadata">
       <source src="intro.mp4" type="video/mp4">
     </video>
+  </div>
+</div>
+
+<div class="modal" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" hidden>
+  <div class="modal__panel modal__panel--form">
+    <button type="button" class="modal__close" id="contactModalClose" aria-label="Chiudi contatti">&times;</button>
+    <h2 id="contactModalTitle">Richiedi una dimostrazione</h2>
+    <p class="lead">Lascia i tuoi dati: ti ricontattiamo per mostrarti un'analisi di esempio sulla tua produzione.</p>
+    <form class="contact-form" id="contactForm" name="contatti" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" netlify>
+      <input type="hidden" name="form-name" value="contatti">
+      <input type="hidden" name="subject" value="Nuova richiesta demo — %{formName} · %{siteName}">
+      <p class="hp" aria-hidden="true">
+        <label>Non compilare questo campo <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+      </p>
+      <div class="fields">
+        <div class="row">
+          <label>Nome
+            <input type="text" name="nome" required autocomplete="name" placeholder="Mario Rossi">
+          </label>
+          <label>Azienda
+            <input type="text" name="azienda" required autocomplete="organization" placeholder="La tua azienda">
+          </label>
+        </div>
+        <div class="row">
+          <label>Email
+            <input type="email" name="email" required autocomplete="email" placeholder="nome@azienda.it">
+          </label>
+          <label>Telefono
+            <input type="tel" name="telefono" autocomplete="tel" placeholder="+39 …">
+          </label>
+        </div>
+        <label>Messaggio
+          <textarea name="messaggio" placeholder="Di cosa vorresti parlare?"></textarea>
+        </label>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary" id="contactSubmit">Invia richiesta</button>
+          <span class="status" id="contactStatus" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+      <p class="status ok" id="contactThanks" hidden>Grazie: abbiamo ricevuto la richiesta. Ti risponderemo a breve.</p>
+    </form>
   </div>
 </div>
 
@@ -616,25 +678,33 @@
   });
   show(0);
 
+  function openModal(el) {
+    if (!el) return;
+    el.hidden = false;
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(el) {
+    if (!el) return;
+    el.classList.remove('open');
+    el.hidden = true;
+    if (!document.querySelector('.modal.open')) document.body.style.overflow = '';
+  }
+
   /* Guarda il video → modale con player */
   var introBtn = document.getElementById('btnIntro');
   var introModal = document.getElementById('introModal');
   var introVid = document.getElementById('introVideo');
   var introClose = document.getElementById('introModalClose');
   function openIntroModal() {
-    if (!introModal || !introVid) return;
-    introModal.hidden = false;
-    introModal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    if (!introVid) return;
+    openModal(introModal);
     introVid.currentTime = 0;
     introVid.play().catch(function () {});
   }
   function closeIntroModal() {
-    if (!introModal || !introVid) return;
-    introVid.pause();
-    introModal.classList.remove('open');
-    introModal.hidden = true;
-    document.body.style.overflow = '';
+    if (introVid) introVid.pause();
+    closeModal(introModal);
   }
   if (introBtn) introBtn.addEventListener('click', openIntroModal);
   if (introClose) introClose.addEventListener('click', closeIntroModal);
@@ -643,8 +713,52 @@
       if (e.target === introModal) closeIntroModal();
     });
   }
+
+  /* Contatti → modale form Netlify */
+  var contactModal = document.getElementById('contactModal');
+  var contactClose = document.getElementById('contactModalClose');
+  var contactForm = document.getElementById('contactForm');
+  var contactStatus = document.getElementById('contactStatus');
+  var contactThanks = document.getElementById('contactThanks');
+  var contactSubmit = document.getElementById('contactSubmit');
+  document.querySelectorAll('[data-open-contact]').forEach(function (btn) {
+    btn.addEventListener('click', function () { openModal(contactModal); });
+  });
+  if (contactClose) contactClose.addEventListener('click', function () { closeModal(contactModal); });
+  if (contactModal) {
+    contactModal.addEventListener('click', function (e) {
+      if (e.target === contactModal) closeModal(contactModal);
+    });
+  }
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (contactStatus) { contactStatus.textContent = 'Invio in corso…'; contactStatus.className = 'status'; }
+      if (contactSubmit) contactSubmit.disabled = true;
+      var data = new URLSearchParams(new FormData(contactForm)).toString();
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: data
+      }).then(function (res) {
+        if (!res.ok) throw new Error('Errore invio');
+        contactForm.setAttribute('data-sent', 'true');
+        if (contactThanks) contactThanks.hidden = false;
+        if (contactStatus) contactStatus.textContent = '';
+      }).catch(function () {
+        if (contactStatus) {
+          contactStatus.textContent = 'Invio non riuscito. Riprova o scrivi a info@tiesseautomazioni.com';
+          contactStatus.className = 'status err';
+        }
+        if (contactSubmit) contactSubmit.disabled = false;
+      });
+    });
+  }
+
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && introModal && introModal.classList.contains('open')) closeIntroModal();
+    if (e.key !== 'Escape') return;
+    if (introModal && introModal.classList.contains('open')) closeIntroModal();
+    if (contactModal && contactModal.classList.contains('open')) closeModal(contactModal);
   });
 })();
 </script>
